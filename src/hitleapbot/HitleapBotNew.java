@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URLEncoder;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 public class HitleapBotNew {
 
     String cfduid, hlSession, authToken, hlAuth, csrfToken;
-    static String username = "elborneo1";
+    static String username = "elborneo3";
     static String password = "123456";
     Socket socket;
     OutputStream os;
@@ -217,12 +218,13 @@ public class HitleapBotNew {
                     }
                     Socket socketNN = new Socket(address, 80);
                     getChunkNN(socketNN);
-                    if(runtime > 100){
+                    runtime += 3;
+                    System.out.println("Runtime = " + runtime);
+                    if (runtime > 100) {
                         runtime = 0;
+                        logout();
                         startHere();
-                    }else{
-                        runtime += 3;
-                    }
+                    } 
 
                 }
 
@@ -278,6 +280,42 @@ public class HitleapBotNew {
             Logger.getLogger(HitleapBotNew.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void logout() {
+        try {
+            //logout
+            System.out.println("Logging out in with username " + username);
+            String data = "_method=post&authenticity_token=" + URLEncoder.encode(authToken, "UTF-8");
+            String doLogout = "POST /log-out HTTP/1.1\r\n"
+                    + "Host: hitleap.com\r\n"
+                    + "Connection: keep-alive\r\n"
+                    + "Content-Length: " + data.length() + "\r\n"
+                    + "Cache-Control: max-age=0\r\n"
+                    + "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
+                    + "Content-Type: application/x-www-form-urlencoded\n"
+                    + "Hitleap-Viewer-Os-Version: 6.2\r\n"
+                    + "Hitleap-Viewer-Version: 2.8\r\n"
+                    + "Origin: http://hitleap.com\r\n"
+                    + "User-Agent: HitLeap Viewer 2.8\r\n"
+                    + "Referer: http://hitleap.com/traffic-exchange/start\r\n"
+                    + "Accept-Encoding: gzip,deflate\r\n"
+                    + "Accept-Language: en-us,en\r\n"
+                    + "Cookie: _hitleap_auth="+hlAuth+"; _hitleap_session="+hlSession+";\r\n\r\n"
+                    + data;
+
+            socket = new Socket(address, port);
+            os = socket.getOutputStream();
+            is = socket.getInputStream();
+            os.write(doLogout.getBytes());
+            os.close();
+            is.close();
+            socket.close();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(HitleapBotNew.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(HitleapBotNew.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String readResponse(InputStream is) throws IOException {
