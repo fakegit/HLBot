@@ -33,6 +33,7 @@ public class HitleapBotNew {
     //String address = "208.48.81.133";
     int port = 80;
     String response;
+    int runtime = 0;
 
     /**
      * @param args the command line arguments
@@ -51,7 +52,6 @@ public class HitleapBotNew {
     }
 
     public void startHere() {
-
         try {
             address = InetAddress.getByName("hitleap.com");
             socket = new Socket(address, port);
@@ -169,8 +169,6 @@ public class HitleapBotNew {
         }
     }
 
-    
-
     public void getChunkCN(Socket socket) {
         System.out.println("Start chunk cn request...");
         try {
@@ -211,6 +209,7 @@ public class HitleapBotNew {
             } else {
 
                 while (true) {
+
                     try {
                         Thread.sleep(180000);
                     } catch (InterruptedException ex) {
@@ -218,6 +217,12 @@ public class HitleapBotNew {
                     }
                     Socket socketNN = new Socket(address, 80);
                     getChunkNN(socketNN);
+                    if(runtime > 100){
+                        runtime = 0;
+                        startHere();
+                    }else{
+                        runtime += 3;
+                    }
 
                 }
 
