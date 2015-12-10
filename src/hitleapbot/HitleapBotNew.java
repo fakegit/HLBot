@@ -200,7 +200,7 @@ public class HitleapBotNew {
             }
             if (response.contains("Content-Length: 19")) {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(3000);
                 } catch (InterruptedException ex) {
 
                 }
@@ -222,7 +222,17 @@ public class HitleapBotNew {
                     System.out.println("Runtime = " + runtime);
                     if (runtime > 100) {
                         runtime = 0;
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(HitleapBotNew.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         logout();
+                         try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(HitleapBotNew.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         startHere();
                     } 
 
@@ -267,7 +277,7 @@ public class HitleapBotNew {
 
             if (response.contains("Content-Length: 19")) {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(3000);
                 } catch (InterruptedException ex) {
 
                 }
