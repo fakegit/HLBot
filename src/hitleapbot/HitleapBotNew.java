@@ -76,7 +76,7 @@ public class HitleapBotNew {
             storeData(response);
 
             //login
-            System.out.println("Logging in with username " + username);
+            Util.log("Logging in with username " + username);
             String data = "utf8=" + URLEncoder.encode("✓", "UTF-8") + "&authenticity_token=" + URLEncoder.encode(authToken, "UTF-8") + "&requested_path=" + URLEncoder.encode("/traffic-exchange", "UTF-8") + "&identifier=" + URLEncoder.encode(username, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&button=";
             String doLogin = "POST http://hitleap.com/log-in HTTP/1.1\r\n"
                     + "Host: hitleap.com\r\n"
@@ -139,39 +139,39 @@ public class HitleapBotNew {
     }
 
     public void storeData(String response) throws IOException {
-        System.out.println("Storing cookies....");
+        Util.log("Storing cookies....");
 
         try {
             cfduid = response.split("__cfduid=")[1].split(";")[0];
-            System.out.println("cfuid = " + cfduid);
+            Util.log("cfuid = " + cfduid);
         } catch (Exception e) {
         }
         try {
             hlSession = response.split("_hitleap_session=")[1].split(";")[0];
-            System.out.println("hlsession = " + hlSession);
+            Util.log("hlsession = " + hlSession);
         } catch (Exception e) {
         }
         try {
             hlAuth = response.split("_hitleap_auth=")[1].split(";")[0];
-            System.out.println("hlauth = " + hlAuth);
+            Util.log("hlauth = " + hlAuth);
         } catch (Exception e) {
         }
 
         try {
             authToken = response.split("name=\"authenticity_token\" value=\"")[1].split("\"")[0];
-            System.out.println("authtoken = " + authToken);
+            Util.log("authtoken = " + authToken);
         } catch (Exception e) {
         }
 
         try {
             csrfToken = response.split("<meta name=\"csrf-token\" content=\"")[1].split("\" />")[0];
-            System.out.println("csrftoken = " + csrfToken);
+            Util.log("csrftoken = " + csrfToken);
         } catch (Exception e) {
         }
     }
 
     public void getChunkCN(Socket socket) {
-        System.out.println("Start chunk cn request...");
+        Util.log("Start chunk cn request...");
         try {
             String chunkCn = "POST http://hitleap.com/get-chunks HTTP/1.1\r\n"
                     + "Host: hitleap.com\r\n"
@@ -195,7 +195,7 @@ public class HitleapBotNew {
             response = readResponse(is);
             storeData(response);
             try {
-                System.out.println("SESSION MINUTES EARNED : " + response.split("\"session_minutes_earned\":\"")[1].split("\"}")[0]);
+                Util.log("SESSION MINUTES EARNED : " + response.split("\"session_minutes_earned\":\"")[1].split("\"}")[0]);
             } catch (Exception e) {
             }
             if (response.contains("Content-Length: 19")) {
@@ -206,7 +206,7 @@ public class HitleapBotNew {
                 }
                 getChunkCN(socket);
             } else if (response.contains("Content-Length: 41")) {
-                System.out.println("exchange-session-not-available");
+                Util.log("exchange-session-not-available");
             } else {
 
                 while (true) {
@@ -219,8 +219,8 @@ public class HitleapBotNew {
                     Socket socketNN = new Socket(address, 80);
                     getChunkNN(socketNN);
                     runtime += 3;
-                    System.out.println("Runtime = " + runtime);
-                    if (runtime > 100) {
+                    Util.log("Runtime = " + runtime + "minutes");
+                    if (runtime > 20) {
                         runtime = 0;
                         try {
                             Thread.sleep(2000);
@@ -247,7 +247,7 @@ public class HitleapBotNew {
     }
 
     public void getChunkNN(Socket socket) {
-        System.out.println("Start chunk nn request...");
+        Util.log("Start chunk nn request...");
         try {
             String chunkNn = "POST http://hitleap.com/get-chunks HTTP/1.1\r\n"
                     + "Host: hitleap.com\r\n"
@@ -271,7 +271,7 @@ public class HitleapBotNew {
             response = readResponse(is);
             storeData(response);
             try {
-                System.out.println("SESSION MINUTES EARNED : " + response.split("\"session_minutes_earned\":\"")[1].split("\"}")[0]);
+                Util.log("SESSION MINUTES EARNED : " + response.split("\"session_minutes_earned\":\"")[1].split("\"}")[0]);
             } catch (Exception e) {
             }
 
@@ -283,7 +283,7 @@ public class HitleapBotNew {
                 }
                 getChunkNN(socket);
             } else if (response.contains("Content-Length: 41")) {
-                System.out.println("exchange-session-not-available");
+                Util.log("exchange-session-not-available");
             }
 
         } catch (IOException ex) {
@@ -295,7 +295,7 @@ public class HitleapBotNew {
     public void logout() {
         try {
             //logout
-            System.out.println("Logging out in with username " + username);
+            Util.log("Logging out in with username " + username);
             String data = "_method=post&authenticity_token=" + URLEncoder.encode(authToken, "UTF-8");
             String doLogout = "POST /log-out HTTP/1.1\r\n"
                     + "Host: hitleap.com\r\n"
