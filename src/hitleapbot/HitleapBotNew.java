@@ -207,6 +207,14 @@ public class HitleapBotNew {
                 getChunkCN(socket);
             } else if (response.contains("Content-Length: 41")) {
                 Util.log("exchange-session-not-available");
+                logout();
+                try {
+                    Util.log("Wait for 20 min to start over....");
+                    Thread.sleep(600000 * 2);
+                } catch (InterruptedException ex) {
+
+                }
+                startHere();
             } else {
 
                 while (true) {
@@ -228,13 +236,13 @@ public class HitleapBotNew {
                             Logger.getLogger(HitleapBotNew.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         logout();
-                         try {
+                        try {
                             Thread.sleep(2000);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(HitleapBotNew.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         startHere();
-                    } 
+                    }
 
                 }
 
@@ -284,6 +292,15 @@ public class HitleapBotNew {
                 getChunkNN(socket);
             } else if (response.contains("Content-Length: 41")) {
                 Util.log("exchange-session-not-available");
+                logout();
+                try {
+                    Util.log("Wait for 20 min to start over....");
+                    Thread.sleep(600000 * 2);
+                } catch (InterruptedException ex) {
+
+                }
+                startHere();
+
             }
 
         } catch (IOException ex) {
@@ -311,7 +328,7 @@ public class HitleapBotNew {
                     + "Referer: http://hitleap.com/traffic-exchange/start\r\n"
                     + "Accept-Encoding: gzip,deflate\r\n"
                     + "Accept-Language: en-us,en\r\n"
-                    + "Cookie: _hitleap_auth="+hlAuth+"; _hitleap_session="+hlSession+";\r\n\r\n"
+                    + "Cookie: _hitleap_auth=" + hlAuth + "; _hitleap_session=" + hlSession + ";\r\n\r\n"
                     + data;
 
             socket = new Socket(address, port);
